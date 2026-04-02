@@ -1,0 +1,17 @@
+.auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 20px; }
+.auth-bg { position: absolute; inset: 0; pointer-events: none; }
+.auth-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.3; }
+.auth-glow { position: absolute; top: -150px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(31,111,235,0.15) 0%, transparent 70%); }
+.auth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px; width: 100%; max-width: 400px; position: relative; z-index: 1; box-shadow: var(--shadow); }
+.auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+.auth-logo-icon { width: 32px; height: 32px; background: var(--accent); color: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; letter-spacing: -0.5px; }
+.auth-logo-text { font-size: 18px; font-weight: 700; }
+.auth-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.auth-subtitle { color: var(--text-secondary); font-size: 13px; margin-bottom: 24px; }
+.auth-form { display: flex; flex-direction: column; }
+.auth-submit { width: 100%; justify-content: center; margin-top: 4px; padding: 9px; font-size: 14px; }
+.auth-switch { text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-secondary); }
+.auth-switch a { color: var(--accent); font-weight: 500; }
+.auth-demo { margin-top: 16px; padding: 12px; background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px dashed var(--border-light); }
+.auth-demo-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.auth-demo-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; flex-wrap: wrap; }

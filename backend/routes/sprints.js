@@ -1,0 +1,11 @@
+const express = require('express');
+const router = express.Router({ mergeParams: true });
+const sc = require('../controllers/sprintController');
+const { authenticate, isProjectMember } = require('../middleware/auth');
+router.use(authenticate, isProjectMember);
+router.get('/', sc.getSprints);
+router.post('/', sc.createSprint);
+router.put('/:id', sc.updateSprint);
+router.get('/backlog', sc.getBacklog);
+router.patch('/tasks/:taskId/sprint', sc.assignToSprint);
+module.exports = router;

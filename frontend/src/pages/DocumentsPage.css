@@ -1,0 +1,30 @@
+.documents-page { max-width: 1200px; }
+.active-view { background: var(--accent-dim) !important; color: var(--accent) !important; }
+
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 16px; }
+.upload-zone:hover, .upload-zone.dragging { border-color: var(--accent); background: var(--accent-dim); }
+.upload-icon { font-size: 36px; margin-bottom: 8px; opacity: 0.6; }
+.upload-text { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin-bottom: 4px; }
+.upload-hint { font-size: 12px; color: var(--text-muted); }
+.upload-progress { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+.docs-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.toolbar-search { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; flex: 1; max-width: 320px; }
+.toolbar-search input { background: none; border: none; outline: none; color: var(--text-primary); font-size: 13px; width: 100%; }
+.toolbar-select { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; color: var(--text-primary); font-size: 13px; cursor: pointer; }
+
+.docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.doc-card { display: flex; flex-direction: column; gap: 6px; padding: 16px; cursor: default; }
+.doc-icon { font-size: 36px; }
+.doc-icon-sm { font-size: 16px; margin-right: 6px; }
+.doc-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-meta { font-size: 11px; color: var(--text-muted); display: flex; gap: 4px; }
+.doc-uploader { font-size: 11px; color: var(--text-secondary); }
+.doc-project { font-size: 10px; width: fit-content; }
+.doc-actions { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+
+.docs-list .docs-list-header, .docs-list .docs-list-row { display: grid; grid-template-columns: 3fr 100px 130px 130px 100px 80px 160px; gap: 10px; padding: 10px 14px; align-items: center; font-size: 13px; }
+.docs-list-header { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; background: var(--bg-hover); }
+.docs-list-row { border-top: 1px solid var(--border); transition: background 0.12s; }
+.docs-list-row:hover { background: var(--bg-hover); }
+.doc-list-name { display: flex; align-items: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

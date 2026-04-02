@@ -1,0 +1,17 @@
+.users-page { max-width: 1100px; }
+.users-toolbar { margin-bottom: 16px; }
+.toolbar-search { display: flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px; max-width: 320px; }
+.toolbar-search input { background: none; border: none; outline: none; color: var(--text-primary); font-size: 13px; width: 100%; }
+.toolbar-search input::placeholder { color: var(--text-muted); }
+
+.users-table { overflow: hidden; padding: 0; }
+.users-table-header { display: grid; grid-template-columns: 2fr 2fr 120px 120px 150px; gap: 12px; padding: 10px 16px; background: var(--bg-hover); font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.users-table-row { display: grid; grid-template-columns: 2fr 2fr 120px 120px 150px; gap: 12px; padding: 12px 16px; align-items: center; border-top: 1px solid var(--border); font-size: 13px; transition: background 0.12s; }
+.users-table-row:hover { background: var(--bg-hover); }
+.user-cell-name { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+.user-table-avatar { font-size: 10px; }
+.user-cell-email { color: var(--text-secondary); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-cell-date { font-size: 12px; color: var(--text-muted); }
+.user-actions { display: flex; gap: 6px; }
+.role-badge { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+.user-modal-info { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--accent-dim); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-secondary); margin-top: 4px; }

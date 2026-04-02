@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const pc = require('../controllers/performanceController');
+const { authenticate } = require('../middleware/auth');
+router.use(authenticate);
+router.get('/me', pc.getUserPerformance);
+router.get('/user/:userId', pc.getUserPerformance);
+router.get('/team', pc.getTeamPerformance);
+router.get('/coaching', pc.getAICoaching);
+module.exports = router;
