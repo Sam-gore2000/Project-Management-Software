@@ -22,3 +22,15 @@
 .info-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .info-row:last-child { border-bottom: none; }
 .info-row span:first-child { color: var(--text-muted); }
+
+/* ── Profile Responsive ── */
+@media (max-width: 768px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-sidebar { order: -1; }
+  .snap-stats { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .snap-stats { grid-template-columns: repeat(2, 1fr); }
+  .snap-score { font-size: 36px; }
+}

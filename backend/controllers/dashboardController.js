@@ -5,15 +5,18 @@ exports.getDashboardStats = async (req, res, next) => {
     const userId = req.user.id;
     const isAdmin = req.user.role === 'Admin';
 
+    // ── Total Projects ──
     let total_projects = 0;
     if (isAdmin) {
       const [[row]] = await pool.query('SELECT COUNT(*) AS total_projects FROM projects');
       total_projects = row.total_projects;
     } else {
-      const [[row]] = await pool.query('SELECT COUNT(*) AS total_projects FROM project_users WHERE user_id = ?', [userId]);
+      const [[row]] = await pool.query(
+        'SELECT COUNT(*) AS total_projects FROM project_users WHERE user_id = ?', [userId]);
       total_projects = row.total_projects;
     }
 
+    // ── Tasks by Status ──
     let tasksByStatus = [];
     if (isAdmin) {
       const [rows] = await pool.query('SELECT status, COUNT(id) AS count FROM tasks GROUP BY status');
@@ -26,17 +29,21 @@ exports.getDashboardStats = async (req, res, next) => {
       tasksByStatus = rows;
     }
 
+    // ── My Tasks & Overdue ──
     const [[{ my_tasks }]] = await pool.query(
       "SELECT COUNT(*) AS my_tasks FROM tasks WHERE assigned_to = ? AND status != 'Done'", [userId]);
     const [[{ overdue_tasks }]] = await pool.query(
       "SELECT COUNT(*) AS overdue_tasks FROM tasks WHERE assigned_to = ? AND due_date < CURDATE() AND status != 'Done'", [userId]);
 
+    // ── Recent Activity (all roles) ──
     const [recentActivity] = await pool.query(
       `SELECT al.*, u.name AS user_name, p.name AS project_name
-       FROM activity_logs al JOIN users u ON al.user_id = u.id
+       FROM activity_logs al
+       JOIN users u ON al.user_id = u.id
        LEFT JOIN projects p ON al.project_id = p.id
        ORDER BY al.created_at DESC LIMIT 10`);
 
+    // ── Projects Progress ──
     let projectsProgress = [];
     if (isAdmin) {
       const [rows] = await pool.query(
@@ -58,28 +65,64 @@ exports.getDashboardStats = async (req, res, next) => {
       projectsProgress = rows;
     }
 
+    // ── User Workload (ALL roles see this) ──
+    // Admin: all users | Manager/Employee: users in same projects
     let userWorkload = [];
     if (isAdmin) {
       const [rows] = await pool.query(
         `SELECT u.id, u.name,
-           COUNT(CASE WHEN t.status='To Do' THEN 1 END) AS todo,
+           COUNT(CASE WHEN t.status='To Do'       THEN 1 END) AS todo,
            COUNT(CASE WHEN t.status='In Progress' THEN 1 END) AS in_progress,
-           COUNT(CASE WHEN t.status='In Review' THEN 1 END) AS in_review,
-           COUNT(CASE WHEN t.status='Done' THEN 1 END) AS done
-         FROM users u LEFT JOIN tasks t ON u.id = t.assigned_to
+           COUNT(CASE WHEN t.status='In Review'   THEN 1 END) AS in_review,
+           COUNT(CASE WHEN t.status='Done'        THEN 1 END) AS done
+         FROM users u
+         LEFT JOIN tasks t ON u.id = t.assigned_to
          GROUP BY u.id
-         ORDER BY (COUNT(CASE WHEN t.status='To Do' THEN 1 END)+COUNT(CASE WHEN t.status='In Progress' THEN 1 END)) DESC
+         HAVING (todo + in_progress + in_review + done) > 0
+         ORDER BY (todo + in_progress) DESC
          LIMIT 10`);
+      userWorkload = rows;
+    } else {
+      // Show workload of teammates in same projects
+      const [rows] = await pool.query(
+        `SELECT u.id, u.name,
+           COUNT(CASE WHEN t.status='To Do'       THEN 1 END) AS todo,
+           COUNT(CASE WHEN t.status='In Progress' THEN 1 END) AS in_progress,
+           COUNT(CASE WHEN t.status='In Review'   THEN 1 END) AS in_review,
+           COUNT(CASE WHEN t.status='Done'        THEN 1 END) AS done
+         FROM users u
+         INNER JOIN project_users pu ON u.id = pu.user_id
+         WHERE pu.project_id IN (
+           SELECT project_id FROM project_users WHERE user_id = ?
+         )
+         LEFT JOIN tasks t ON u.id = t.assigned_to
+         GROUP BY u.id
+         HAVING (todo + in_progress + in_review + done) > 0
+         ORDER BY (todo + in_progress) DESC
+         LIMIT 10`, [userId]);
       userWorkload = rows;
     }
 
-    res.json({ success: true, stats: { total_projects, my_tasks, overdue_tasks, tasks_by_status: tasksByStatus, recent_activity: recentActivity, projects_progress: projectsProgress, user_workload: userWorkload } });
+    res.json({
+      success: true,
+      stats: {
+        total_projects,
+        my_tasks,
+        overdue_tasks,
+        tasks_by_status:   tasksByStatus,
+        recent_activity:   recentActivity,
+        projects_progress: projectsProgress,
+        user_workload:     userWorkload,
+      }
+    });
   } catch (err) { next(err); }
 };
 
 exports.getNotifications = async (req, res, next) => {
   try {
-    const [notifications] = await pool.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 20', [req.user.id]);
+    const [notifications] = await pool.query(
+      'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 20',
+      [req.user.id]);
     res.json({ success: true, notifications });
   } catch (err) { next(err); }
 };
